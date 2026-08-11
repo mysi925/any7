@@ -703,9 +703,15 @@ p{margin:0}
   /* ==========================================================
      1. CHECKOUT — Stripe / Square wiring
      ----------------------------------------------------------
-     Square embedded checkout — hits /api/checkout on the backend.
-     The server creates a Square payment link and we redirect to it.
+     Paste a Stripe Payment Link or Square checkout URL below and
+     every button on the page starts working. Nothing else to change.
+     Buttons are matched by their data-tier attribute.
      ========================================================== */
+  var CHECKOUT_LINKS = {
+    access : '',   // e.g. 'https://buy.stripe.com/xxxxxxxx'
+    system : '',
+    control: ''
+  };
 
   /* ==========================================================
      2. HEADLINE VARIANTS — for A/B testing
@@ -757,28 +763,9 @@ p{margin:0}
     toastTimer = setTimeout(function(){ toast.classList.remove('show'); }, 3200);
   }
   function checkout(tier){
-    // Disable all tier buttons while we create the session
-    document.querySelectorAll('[data-tier]').forEach(function(b){ b.disabled = true; });
-    showToast('Loading checkout…');
-
-    fetch('/api/checkout', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tier: tier })
-    })
-    .then(function(res){ return res.json(); })
-    .then(function(data){
-      if(data.url){
-        window.location.href = data.url;
-      } else {
-        showToast(data.error || 'Something went wrong. Try again.');
-        document.querySelectorAll('[data-tier]').forEach(function(b){ b.disabled = false; });
-      }
-    })
-    .catch(function(){
-      showToast('Connection error. Try again.');
-      document.querySelectorAll('[data-tier]').forEach(function(b){ b.disabled = false; });
-    });
+    var url = CHECKOUT_LINKS[tier];
+    if(url){ window.location.href = url; return; }
+    showToast('Checkout not connected — add your payment link');
   }
   document.querySelectorAll('[data-tier]').forEach(function(btn){
     btn.addEventListener('click', function(){ checkout(btn.getAttribute('data-tier')); });
