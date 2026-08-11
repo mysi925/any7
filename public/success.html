@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Access Granted — WinOnAny</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --void:#050507;--panel:#0B0B0F;--line:rgba(255,255,255,.07);
+  --text:#F2F2F4;--muted:#85858F;--muted-2:#5C5C66;
+  --accent:#6E56F8;--accent-lift:#8B78FF;
+  --display:'Archivo',Arial,sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+html,body{height:100%}
+body{background:var(--void);color:var(--text);font-family:var(--display);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:32px 20px;text-align:center;-webkit-font-smoothing:antialiased}
+.glow{position:fixed;left:50%;top:40%;width:min(800px,120vw);aspect-ratio:1/.7;
+  transform:translate(-50%,-50%);pointer-events:none;
+  background:radial-gradient(ellipse at center,rgba(110,86,248,.22),transparent 66%);filter:blur(10px)}
+.card{position:relative;z-index:2;max-width:480px;width:100%;
+  background:var(--panel);border:1px solid var(--line);padding:clamp(36px,6vw,56px) clamp(28px,5vw,48px)}
+.card::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:var(--accent)}
+.icon{font-size:clamp(36px,8vw,52px);margin-bottom:24px;display:block}
+h1{font-size:clamp(24px,5vw,36px);font-weight:800;letter-spacing:-.04em;line-height:1.05}
+.sub{margin-top:14px;color:var(--muted);font-size:clamp(14px,1.8vw,16px);line-height:1.6}
+.divider{margin:28px 0;height:1px;background:var(--line)}
+.detail{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted-2);line-height:1.8}
+.detail b{color:var(--accent-lift);font-weight:400}
+.btn{display:inline-flex;align-items:center;justify-content:center;
+  margin-top:28px;height:50px;padding:0 28px;background:var(--accent);color:#fff;
+  font-family:var(--display);font-size:14px;font-weight:600;letter-spacing:.01em;
+  border:0;cursor:pointer;text-decoration:none;transition:background .3s}
+.btn:hover{background:var(--accent-lift)}
+</style>
+</head>
+<body>
+<div class="glow" aria-hidden="true"></div>
+<div class="card">
+  <span class="icon" aria-hidden="true">✦</span>
+  <h1>Access granted.</h1>
+  <p class="sub">Your order is confirmed. Check your email — your access link is on its way.</p>
+  <div class="divider"></div>
+  <p class="detail">
+    One payment &nbsp;<b>·</b>&nbsp; Instant delivery<br>
+    No subscription &nbsp;<b>·</b>&nbsp; No renewals
+  </p>
+  <a class="btn" href="/">Back to WinOnAny</a>
+</div>
+<script>
+  // Pull the tier from the query string Square passes back
+  var params = new URLSearchParams(window.location.search);
+  var tier = params.get('tier');
+  var labels = { access: 'Starter', system: 'The Vault', control: 'Full Access' };
+  if (tier && labels[tier]) {
+    var sub = document.querySelector('.sub');
+    sub.textContent = 'Your ' + labels[tier] + ' order is confirmed. Check your email — your access link is on its way.';
+  }
+</script>
+</body>
+</html>
