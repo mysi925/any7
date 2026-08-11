@@ -34,6 +34,13 @@ app.use('/api', webhookRoute);
 // ─── Static files ─────────────────────────────────────────────────────────────
 app.use(express.static(path.join(__dirname, 'public')));
 
+// ─── Named page routes ────────────────────────────────────────────────────────
+// /pay must be explicit — express.static only matches exact filenames,
+// so /pay would fall through to the * wildcard without this.
+app.get('/pay', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'pay.html'));
+});
+
 // SPA fallback — serve index.html for any unmatched route
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
